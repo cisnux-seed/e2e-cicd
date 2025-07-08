@@ -28,7 +28,7 @@ pipeline{
                     }
                 }
 
-                stage('Static Code Analysis (SAST) via Sonar') {
+                stage('Static Code Analysis (SAST) by Sonar') {
                     steps {
                         sh """
                             mvn clean compile sonar:sonar \
