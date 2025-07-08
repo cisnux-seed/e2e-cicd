@@ -100,8 +100,7 @@ pipeline{
                             gcloud config set project ${GCP_PROJECT_ID}
 
                             echo "=== Running Terraform ==="
-                            pwd
-                            cd terraform/
+                            cd ../../terraform/
                             terraform init
                             terraform plan
                             terraform apply -auto-approve
@@ -149,10 +148,6 @@ pipeline{
             sh """
                 echo "=== Cleanup ==="
                 docker image prune -f || true
-
-                # Clean up GCP auth (optional)
-                gcloud auth revoke --all || true
-
                 echo "=== Cleanup completed ==="
             """
         }
