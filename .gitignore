@@ -7,7 +7,7 @@ target/
 terraform/
 
 ### STS ###
-.terraform
+terraform/.terraform
 .apt_generated
 .classpath
 .factorypath
