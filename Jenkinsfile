@@ -4,7 +4,7 @@ pipeline{
     environment {
         APP_NAME = 'greedy'
         APP_VERSION = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
-        DOCKER_NAMESPACE = 'fajrarisqulla'
+        DOCKER_NAMESPACE = 'fajrarisqullas'
         DOCKER_IMAGE = "${DOCKER_NAMESPACE}/${APP_NAME}"
     }
 
