@@ -3,7 +3,7 @@ pipeline{
 
     tools {
       maven 'Maven Latest'
-//       jdk 'Temurin JDK Latest'
+      jdk 'JDK Latest'
     }
 
     environment {
@@ -14,21 +14,12 @@ pipeline{
     }
 
     stages {
-//         stage('Unit Test & Coverage') {
-//       steps {
-//         sh 'mvn package'
-//       }
-//       post {
-//         always {
-//           archiveArtifacts artifacts: 'target/surefire-reports/**/*', allowEmptyArchive: true
-//
-//           script {
-//             def testResults = sh(script: 'find target/surefire-reports -name "*.xml" | wc -l', returnStdout: true).trim()
-//             echo "Found ${testResults} test result files"
-//           }
-//         }
-//       }
-//     }
+        stage('Static Code Analysis (SAST) via Sonar') {
+            steps {
+              sh "mvn test"
+            }
+        }
+
         stage('Static Code Analysis (SAST) via Sonar') {
           steps {
             sh """
