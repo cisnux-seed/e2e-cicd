@@ -13,8 +13,10 @@ pipeline{
         DOCKER_IMAGE = "${DOCKER_NAMESPACE}/${APP_NAME}"
 
         // GCP Configuration for Terraform
-        GCP_PROJECT_ID = 'your-project-id'
-        GCP_REGION = 'us-central1'
+        GCP_PROJECT_ID = 'rakamin-ttc-odp-it-4'
+        GCP_REGION = 'asia-southeast2'
+        DISCORD_WEBHOOK_URL = credentials('discord-webhook-url')
+
     }
 
     stages {
@@ -111,6 +113,38 @@ pipeline{
     }
 
     post {
+//         success {
+//             echo "Pipeline berhasil 🚀"
+//             echo "Docker image berhasil di-push ke Docker Hub: ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}"
+//
+//             sh """
+//             curl -H "Content-Type: application/json" \
+//                 -X POST \
+//                 -d '{
+//                 "content": "*✅ Build Sukses!*\\nProject: ${DOCKER_IMAGE_NAME}\\nTag: ${DOCKER_TAG}\\nStage: Success 🚀"
+//                 }' \
+//                 ${DISCORD_WEBHOOK_URL}
+//             """
+//         }
+//
+//         failure {
+//             echo "Pipeline gagal 💥"
+//
+//             sh """
+//             curl -H "Content-Type: application/json" \
+//                 -X POST \
+//                 -d '{
+//                 "content": "*❌ Build Gagal!*\\nProject: ${DOCKER_IMAGE_NAME}\\nTag: ${DOCKER_TAG}\\nStage: Failed 💥"
+//                 }' \
+//                 ${DISCORD_WEBHOOK_URL}
+//             """
+//
+//             // Cleanup Docker images
+//             sh """
+//             docker rmi ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} || true
+//             docker rmi ${DOCKER_IMAGE_NAME}:latest || true
+//             """
+//         }
         always {
             sh """
                 echo "=== Cleanup ==="
