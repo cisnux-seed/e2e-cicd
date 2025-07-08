@@ -9,6 +9,32 @@ pipeline{
     }
 
     stages {
+//         stage('Unit Test & Coverage') {
+//       steps {
+//         sh 'mvn package'
+//       }
+//       post {
+//         always {
+//           archiveArtifacts artifacts: 'target/surefire-reports/**/*', allowEmptyArchive: true
+//
+//           script {
+//             def testResults = sh(script: 'find target/surefire-reports -name "*.xml" | wc -l', returnStdout: true).trim()
+//             echo "Found ${testResults} test result files"
+//           }
+//         }
+//       }
+//     }
+        stage('Static Code Analysis (SAST) via Sonar') {
+          steps {
+            sh """
+                mvn clean compile sonar:sonar \
+                  -Dsonar.projectKey=springboot \
+                  -Dsonar.projectName='springboot' \
+                  -Dsonar.host.url=http://sonarqube:9000 \
+                  -Dsonar.token=sqp_3a35478c4c1e07878cd1c5e500461c025b105767
+            """
+          }
+        }
         stage('Build and Push Docker Image') {
             steps {
                 script {
