@@ -15,7 +15,7 @@ pipeline{
         // GCP Configuration for Terraform
         GCP_PROJECT_ID = 'rakamin-ttc-odp-it-4'
         GCP_REGION = 'asia-southeast2'
-        DISCORD_WEBHOOK_URL = credentials('discord-webhook-url')
+//         DISCORD_WEBHOOK_URL = credentials('discord-webhook-url')
 
     }
 
