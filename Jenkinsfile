@@ -14,7 +14,7 @@ pipeline{
     }
 
     stages {
-        stage('Static Code Analysis (SAST) via Sonar') {
+        stage('Unit Test') {
             steps {
               sh "mvn test"
             }
