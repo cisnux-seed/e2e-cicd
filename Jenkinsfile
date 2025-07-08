@@ -1,6 +1,11 @@
 pipeline{
     agent any
 
+    tools {
+      maven 'Maven Latest'
+      jdk 'Temurin JDK Latest'
+    }
+
     environment {
         APP_NAME = 'greedy'
         APP_VERSION = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
