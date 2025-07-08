@@ -98,6 +98,7 @@ pipeline{
                             gcloud config set project ${GCP_PROJECT_ID}
 
                             echo "=== Running Terraform ==="
+                            pwd
                             cd terraform/
                             terraform init
                             terraform plan
