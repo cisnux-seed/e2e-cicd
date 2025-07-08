@@ -14,23 +14,28 @@ pipeline{
     }
 
     stages {
-        stage('Unit Test') {
-            steps {
-              sh "mvn test"
+        stage('Parallel Testing and Analysis') {
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                        sh "mvn test"
+                    }
+                }
+
+                stage('Static Code Analysis (SAST) via Sonar') {
+                    steps {
+                        sh """
+                            mvn clean compile sonar:sonar \
+                              -Dsonar.projectKey=springboot \
+                              -Dsonar.projectName='springboot' \
+                              -Dsonar.host.url=http://sonarqube:9000 \
+                              -Dsonar.token=sqp_3a35478c4c1e07878cd1c5e500461c025b105767
+                        """
+                    }
+                }
             }
         }
 
-        stage('Static Code Analysis (SAST) via Sonar') {
-          steps {
-            sh """
-                mvn clean compile sonar:sonar \
-                  -Dsonar.projectKey=springboot \
-                  -Dsonar.projectName='springboot' \
-                  -Dsonar.host.url=http://sonarqube:9000 \
-                  -Dsonar.token=sqp_3a35478c4c1e07878cd1c5e500461c025b105767
-            """
-          }
-        }
         stage('Build and Push Docker Image') {
             steps {
                 script {
