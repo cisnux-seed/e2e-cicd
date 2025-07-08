@@ -11,6 +11,10 @@ pipeline{
         APP_VERSION = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
         DOCKER_NAMESPACE = 'fajrarisqulla'
         DOCKER_IMAGE = "${DOCKER_NAMESPACE}/${APP_NAME}"
+
+        // GCP Configuration for Terraform
+        GCP_PROJECT_ID = 'your-project-id'
+        GCP_REGION = 'us-central1'
     }
 
     stages {
@@ -77,6 +81,32 @@ pipeline{
                 }
             }
         }
+
+        stage('Terraform Deploy') {
+            steps {
+                script {
+                    // Method 1: Using Service Account Key for Terraform ADC
+                    withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                        sh """
+                            echo "=== Setting up GCP Application Default Credentials for Terraform ==="
+
+                            # Set the environment variable that Terraform will use
+                            export GOOGLE_APPLICATION_CREDENTIALS=\$GOOGLE_APPLICATION_CREDENTIALS
+
+                            # Optional: Also authenticate gcloud (if you need gcloud commands)
+                            gcloud auth activate-service-account --key-file=\$GOOGLE_APPLICATION_CREDENTIALS
+                            gcloud config set project ${GCP_PROJECT_ID}
+
+                            echo "=== Running Terraform ==="
+                            cd terraform/
+                            terraform init
+                            terraform plan
+                            terraform apply -auto-approve
+                        """
+                    }
+                }
+            }
+        }
     }
 
     post {
@@ -84,6 +114,10 @@ pipeline{
             sh """
                 echo "=== Cleanup ==="
                 docker image prune -f || true
+
+                # Clean up GCP auth (optional)
+                gcloud auth revoke --all || true
+
                 echo "=== Cleanup completed ==="
             """
         }
