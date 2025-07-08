@@ -3,7 +3,7 @@ pipeline{
 
     tools {
       maven 'Maven Latest'
-      jdk 'Temurin JDK Latest'
+//       jdk 'Temurin JDK Latest'
     }
 
     environment {
